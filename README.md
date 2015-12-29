@@ -13,6 +13,6 @@ Learn reactjs and share clean and easy examples with react freshers
 * Go to the folder checked-in from git <strong>"reactjs-instagram"</strong>
 * Open command prompt and run <strong>"node server.js"</strong>
 * This will start server on default port <strong>":3000"</strong>
-* You might be able to see full URL on command prompt "http://localhost:3000/"
+* You might be able to see full URL on command prompt <strong>"http://localhost:3000/"</strong>
 * Run this URL on browser and see the results
 * Happy learning!!   

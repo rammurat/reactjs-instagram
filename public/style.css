@@ -116,3 +116,7 @@ body {
   width: 102%;
   margin-left: -1%;
 }
+
+.thumbnail img:hover{
+  cursor: pointer;
+}

@@ -10,14 +10,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var fs = require('fs');
-var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+var fs = require('fs'),
+    path = require('path'),
+    express = require('express'),
+    bodyParser = require('body-parser'),
+    app = express();
+    underscore = require('underscore'),
 
-var LIST_FILE = path.join(__dirname, 'list.json');
-var USER_PROFILE_FILE = path.join(__dirname, 'user-profile.json');
+LIST_FILE = path.join(__dirname, 'list.json'),
+USER_PROFILE_FILE = path.join(__dirname, 'user-profile.json');
 
 app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -46,33 +47,36 @@ app.get('/api/list', function(req, res) {
   });
 });
 
-app.post('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
+app.post('/api/addComment', function(req, res) {
+  fs.readFile(LIST_FILE, function(err, data) {
     if (err) {
       console.error(err);
       process.exit(1);
     }
-    var comments = JSON.parse(data);
-    // NOTE: In a real implementation, we would likely rely on a database or
-    // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
-    // treat Date.now() as unique-enough for our purposes.
-    var newComment = {
-      id: Date.now(),
-      author: req.body.author,
-      text: req.body.text,
-    };
-    comments.push(newComment);
-    fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
+
+    var list = JSON.parse(data),
+        newComment = {
+          id: Date.now(),
+          username: req.body.username,
+          comment: req.body.comment
+        },
+        record = underscore._.findWhere(list, {id: req.body.post_id});
+
+    if(record){
+        record.comments.push(newComment);
+    }
+
+    fs.writeFile(LIST_FILE, JSON.stringify(list, null, 4), function(err) {
       if (err) {
         console.error(err);
         process.exit(1);
       }
       res.setHeader('Cache-Control', 'no-cache');
-      res.json(comments);
+      res.json(list);
     });
+    
   });
 });
-
 
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');

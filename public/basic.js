@@ -71,56 +71,17 @@ var ThumbnailBody = React.createClass({
 
 //prepare current item share/liked content area
 var ThumbnailFooter = React.createClass({
-	getInitialState: function() {
-		//set default values
-    	var isUserLiked = _.contains(this.props.likes, $.parseJSON(sessionStorage.getItem('userProfileInstagram')).username),
-			image = isUserLiked ? "images/heart-active.png" : "images/heart-inactive.png",
-			activeClass = isUserLiked ? "active" : ""; 
-
-		//return default object
-    	return {activeClass: activeClass,image: image,comment : "",postId : ""};
-  	},
-	handleImageChange: function(e) {
-		
-		//update item liked status with image 	
-		var isActive = $(e.target).hasClass('active'),
-			image =  isActive ? "images/heart-inactive.png" : "images/heart-active.png",
-			activeClass = isActive ? "" : "active";
-
-		//update image path and status
-	    this.setState({activeClass: activeClass,image: image});
-    },
-    handleCommentChange: function(e) {
-
-    	//update comment on change
-	    this.setState({comment: e.target.value});
-    },
-    handleSubmit: function(e) {
-	    e.preventDefault(); //prevent form submission
-	    var comment = this.state.comment.trim();
-
-	    //validate comment value
-	    if (!comment) {
-	      return;
-	    }
-
-	    //Send request to the server
-	    this.setState({comment: ''});
-
-	    //prepare comment data to send on server 
-	    this.props.onCommentSubmit({post_id : this.props.postId,comment: comment,username: $.parseJSON(sessionStorage.getItem('userProfileInstagram')).username});
-    },
 	render: function() {
-			
+
 		return (
 			<div className="row">
 				<div className="col-sm-11 col-md-11">
 					<div className="thumbnail col-sm-1 col-md-1 avatar">
-				      <img src={this.state.image} className={this.state.activeClass} alt="..." onClick={this.handleImageChange}/>
+				      <img src="images/heart-inactive.png" alt="..."/>
 				    </div>
 				    <div className="col-sm-11 col-md-11 padding-left-20">
-			  			<form onSubmit={this.handleSubmit}>
-			          		<input type="text" onChange={this.handleCommentChange} value={this.state.comment} placeholder="Add comment..." className="form-control full-width"/>
+			  			<form>
+			          		<input type="search" placeholder="Add comment..." className="form-control full-width"/>
 			          	</form>
 		          	</div>
 				</div>
@@ -159,11 +120,9 @@ var ThumbnailHeader = React.createClass({
 //get updates from server and prepare list
 var Thumbnail = React.createClass({
 	getInitialState: function() {
-		
 		return {list: []}; //default data
 	},
 	loadCommentsFromServer : function(){
-
 		//get updated data from server
 		$.ajax({
 			url: this.props.url,
@@ -181,26 +140,6 @@ var Thumbnail = React.createClass({
 	componentDidMount: function() {
 		this.loadCommentsFromServer();
 	},
-	handleCommentSubmit : function(comment){
-
-		$.ajax({
-		  url: INSTAGRAM.addComment,
-		  dataType: 'json',
-		  type: 'POST',
-		  data: comment,
-		  success: function(data) {
-
-		  	//update data after comment submission
-			this.setState({list: data});
-		  
-		  }.bind(this),
-		  error: function(xhr, status, err) {
-			
-			console.error(INSTAGRAM.addComment, status, err.toString());
-			
-		  }.bind(this)
-		});
-	},
 	render: function() {
 		var rows = []; //local variable
 
@@ -212,7 +151,7 @@ var Thumbnail = React.createClass({
             	<div className="thumbnail" key={data.id}>
 	            	<ThumbnailHeader time={data.time} username={data.username} user_profile_image={data.user_profile_image} />
 	            	<ThumbnailBody data={data}  />
-	            	<ThumbnailFooter likes={data.likes} postId={data.id} onCommentSubmit={this.handleCommentSubmit} />
+	            	<ThumbnailFooter  />
             	</div>
         	);
         }.bind(this));
@@ -280,18 +219,9 @@ var PageContent = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
-				//create session object
-				var sessionData = {
-					username : data.username,
-					email : data.email
-				};
-
-				//store user data in session for later use
-				sessionStorage.setItem('userProfileInstagram', JSON.stringify(sessionData));
 
 				//update user profile data
 				this.setState({userProfile: data});
-
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(this.props.url, status, err.toString());

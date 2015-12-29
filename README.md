@@ -1,4 +1,6 @@
-# Application Name - reactjs-instagram
+# Application Name - "reactjs-instagram"
+The idea is to share demos with new audience while learning. This application is a quick replica of Instagram (Web version).
+By creating this replica we are trying to observe the complexity and challenges that might come during development.   
 
 ## Purpose
 Learn reactjs and share clean and easy examples with react freshers
@@ -8,9 +10,9 @@ Learn reactjs and share clean and easy examples with react freshers
 
 ## Steps to run the application
 * Clone the application on your local computer first, by using command "git clone https://github.com/rammurat/reactjs-instagram.git"
-* Go to the folder checked-in from git "reactjs-instagram"
+* Go to the folder checked-in from git <strong>"reactjs-instagram"</strong>
 * Open command prompt and run "node server.js"
 * This will start server on default port ":3000"
-* You might be able to see full url on command prompt "http://localhost:3000/"
-* Run this url on browser and see the results
+* You might be able to see full URL on command prompt "http://localhost:3000/"
+* Run this URL on browser and see the results
 * Happy learning!!   

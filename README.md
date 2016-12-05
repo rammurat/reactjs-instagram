@@ -11,7 +11,7 @@ Learn reactjs and share clean and easy examples with react freshers
 ## Steps to run the application
 * Clone the application on your local computer first, by using command <strong>"git clone https://github.com/rammurat/reactjs-instagram.git"</strong>
 * Go to the folder checked-in from git <strong>"reactjs-instagram"</strong>
-* Open command prompt and run <strong>"node server.js"</strong>
+* Open command prompt and run <strong>"node server"</strong>
 * This will start server on default port <strong>":3000"</strong>
 * You might be able to see full URL on command prompt <strong>"http://localhost:3000/"</strong>
 * Run this URL on browser and see the results
